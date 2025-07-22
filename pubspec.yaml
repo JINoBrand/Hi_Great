@@ -1,0 +1,27 @@
+name: if_and_try
+
+description: >-
+  IF AND TRY - 실시간 AI 인물 채팅 Flutter 앱 UI 프로토타입
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo.png
+    - assets/sejong.png
+    - assets/jobs.png
+    - assets/gandi.png
