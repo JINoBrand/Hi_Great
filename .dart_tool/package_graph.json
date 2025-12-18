@@ -1,10 +1,10 @@
 {
   "roots": [
-    "if_and_try"
+    "hi_great"
   ],
   "packages": [
     {
-      "name": "if_and_try",
+      "name": "hi_great",
       "version": "1.0.0+1",
       "dependencies": [
         "cupertino_icons",

@@ -1,11 +1,11 @@
 {
-    "name": "if_and_try",
-    "short_name": "if_and_try",
+    "name": "Hi_Great",
+    "short_name": "Hi Great",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FFFFFF",
+    "theme_color": "#FFFFFF",
+    "description": "AI Character Chat with Hi_Great - Talk to historical and inspirational figures",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/character_card.dart';
-import '../widgets/locked_character_card.dart';
 import 'chat_screen.dart';
+import '../widgets/bottom_navigation.dart';
 
 class CharacterSelectionScreen extends StatelessWidget {
   CharacterSelectionScreen({Key? key}) : super(key: key);
@@ -53,85 +53,100 @@ class CharacterSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          // Calculate the max card size that fits 3:4 aspect ratio
-          double maxWidth = constraints.maxWidth * 0.65 * 0.9;
-          double maxHeight = constraints.maxHeight * 0.6;
-          double cardWidth = maxWidth;
-          double cardHeight = cardWidth / 3 * 4;
-          if (cardHeight > maxHeight) {
-            cardHeight = maxHeight;
-            cardWidth = cardHeight / 4 * 3;
-          }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 20),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/logo.png',
-                      height: 128,
-                      fit: BoxFit.contain,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // App Bar
+            Container(
+              padding: const EdgeInsets.all(16),
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
+                ),
+              ),
+              child: const Text(
+                'Hi Great',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            
+            // Title and Description
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  const Text(
+                    '인물 선택하기',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '당신이 가장 대화해 보고 싶은 위인은 누구인가요?',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            
+            // Character List
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ...availableCharacters.map(
+                      (character) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: CharacterCard(
+                          name: character['name']!,
+                          quote: character['quote']!,
+                          imageUrl: character['image']!,
+                          actionButtonText: character['name'] == '세종대왕' ? '상호 즐기기' :
+                                           character['name'] == '스티브 잡스' ? 'Ideation 시작하기' :
+                                           '대화 시작하기',
+                          onActionButtonPressed: () => _onCharacterTap(context, character),
+                        ),
+                      ),
+                    ),
+                    // 더 많은 캐릭터를 추가할 수 있음
                   ],
                 ),
               ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 8,
-                        offset: Offset(0, -2),
-                      ),
-                    ],
-                  ),
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-                    children: [
-                      ...availableCharacters.map(
-                        (character) => Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: GestureDetector(
-                            onTap: () => _onCharacterTap(context, character),
-                            child: CharacterCard(
-                              name: character['name']!,
-                              quote: character['quote']!,
-                              imageUrl: character['image']!,
-                              width: cardWidth,
-                              height: cardHeight,
-                            ),
-                          ),
-                        ),
-                      ),
-                      ...List.generate(
-                        totalCharacters - availableCharacters.length,
-                        (index) => Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: GestureDetector(
-                            onTap: () => _onLockedTap(context),
-                            child: LockedCharacterCard(
-                              width: cardWidth,
-                              height: cardHeight,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
+            ),
+            
+            // Bottom Navigation
+            BottomNavigation(
+              currentIndex: 0,
+              onTap: (index) {
+                // 탭 변경 로직 구현
+                if (index != 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('준비 중인 기능입니다.'),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

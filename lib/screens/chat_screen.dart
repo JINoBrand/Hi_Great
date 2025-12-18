@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/chat_bubble.dart';
+import '../widgets/bottom_navigation.dart';
 
 class ChatScreen extends StatefulWidget {
   final Map<String, String> character;
@@ -38,71 +39,131 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 1,
+        elevation: 0,
+        centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.indigo[800]),
+          icon: Icon(Icons.arrow_back_ios, color: Color(0xFF2F2F53), size: 20),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Row(
+        title: Column(
           children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(widget.character['image']!),
-              backgroundColor: Colors.grey[200],
-            ),
-            SizedBox(width: 10),
             Text(
               widget.character['name']!,
-              style: TextStyle(color: Colors.indigo[800]),
+              style: TextStyle(color: Color(0xFF2F2F53), fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            Text(
+              '채팅 중',
+              style: TextStyle(color: Colors.grey[600], fontSize: 12),
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_horiz, color: Color(0xFF2F2F53)),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('추가 옵션은 준비 중입니다')),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
+          // 채팅 리스트
           Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: EdgeInsets.symmetric(vertical: 18, horizontal: 14),
-              itemCount: _messages.length,
-              itemBuilder: (context, idx) {
-                final msg = _messages[idx];
-                final isUser = msg['role'] == 'user';
-                return ChatBubble(
-                  text: msg['content']!,
-                  isUser: isUser,
-                  avatarUrl: isUser ? null : widget.character['image'],
-                );
-              },
+            child: Container(
+              color: Color(0xFFFAFAFA),
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: EdgeInsets.symmetric(vertical: 18, horizontal: 14),
+                itemCount: _messages.length,
+                itemBuilder: (context, idx) {
+                  final msg = _messages[idx];
+                  final isUser = msg['role'] == 'user';
+                  // 첫 메시지이거나 전 메시지와 다른 화자일 경우 발신자 이름 표시
+                  final showName = !isUser && (idx == 0 || _messages[idx - 1]['role'] != 'ai');
+                  
+                  return ChatBubble(
+                    text: msg['content']!,
+                    isUser: isUser,
+                    avatarUrl: isUser ? null : widget.character['image'],
+                    senderName: showName ? widget.character['name'] : null,
+                    timestamp: DateTime.now(),
+                  );
+                },
+              ),
             ),
           ),
+          
+          // 입력 영역
           Container(
-            color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 3,
+                  offset: Offset(0, -1),
+                ),
+              ],
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                IconButton(
+                  icon: Icon(Icons.add_circle_outline, color: Color(0xFF9B9B9B)),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('준비 중인 기능입니다')),
+                    );
+                  },
+                ),
                 Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: '메시지를 입력하세요...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(18),
-                        borderSide: BorderSide(color: Colors.indigo.shade100),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF7F7F7),
+                      borderRadius: BorderRadius.circular(24),
                     ),
-                    onSubmitted: (_) => _sendMessage(),
+                    child: TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: '메시지를 입력하세요...',
+                        hintStyle: TextStyle(color: Color(0xFF9B9B9B), fontSize: 14),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      ),
+                      minLines: 1,
+                      maxLines: 4,
+                      onSubmitted: (_) => _sendMessage(),
+                    ),
                   ),
                 ),
-                SizedBox(width: 8),
                 IconButton(
-                  icon: Icon(Icons.send, color: Colors.indigo[700]),
+                  icon: Icon(Icons.send_rounded, color: Color(0xFF5250C5)),
                   onPressed: _sendMessage,
                 ),
               ],
             ),
+          ),
+          
+          // 하단 네비게이션
+          BottomNavigation(
+            currentIndex: 0,
+            onTap: (index) {
+              if (index != 0) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('준비 중인 기능입니다'),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),

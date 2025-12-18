@@ -1,51 +1,64 @@
 import 'package:flutter/material.dart';
 
 class LockedCharacterCard extends StatelessWidget {
-  final double width;
-  final double height;
+  final VoidCallback onTap;
 
   const LockedCharacterCard({
     Key? key,
-    required this.width,
-    required this.height,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: 0.4,
+    return GestureDetector(
+      onTap: onTap,
       child: Container(
-        width: width,
-        height: height,
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.grey.shade400, width: 1.5),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.lock_outline, size: width * 0.22, color: Colors.grey[500]),
-              SizedBox(height: 16),
-              Text(
-                '잠금',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey[600],
-                  fontWeight: FontWeight.bold,
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: Colors.grey[400],
+                shape: BoxShape.circle,
               ),
-              SizedBox(height: 8),
-              Text(
-                '준비 중입니다',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[500],
-                ),
+              child: const Icon(
+                Icons.lock,
+                color: Colors.white,
+                size: 30,
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '준비 중',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[600],
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '곧 만나볼 수 있어요!',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[500],
+              ),
+            ),
+          ],
         ),
       ),
     );

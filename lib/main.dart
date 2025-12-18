@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'screens/character_selection_screen.dart';
 
 void main() {
-  runApp(IfAndTryApp());
+  runApp(HiGreatApp());
 }
 
-class IfAndTryApp extends StatelessWidget {
+class HiGreatApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'IF AND TRY',
+      title: 'Hi_Great',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.indigo,
